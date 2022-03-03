@@ -10,12 +10,13 @@ use Illuminate\Support\Facades\Auth;
 
 class TarefaController extends Controller
 {
-    
-    public function _construct(){
-       // $this->middleware('auth');
+
+    public function _construct()
+    {
+        // $this->middleware('auth');
     }
-    
-        
+
+
     /*
      * Display a listing of the resource.
      *
@@ -28,7 +29,7 @@ class TarefaController extends Controller
         $tarefas = Tarefa::where('user_id', $user_id)->paginate(10);
         return view('tarefa.index', ['tarefas' => $tarefas]);
     }
-        /*
+    /*
         if(auth()->check()) {
             $id = auth()->user()->id;
             $name = auth()->user()->name;
@@ -39,7 +40,7 @@ class TarefaController extends Controller
             return "Você não está logado no sistema";
         }
         */
-    
+
 
     /*
      * Show the form for creating a new resource.
@@ -67,8 +68,7 @@ class TarefaController extends Controller
         $destinatario = auth()->user()->email; //email do usuario logado (autenticado)
         Mail::to($destinatario)->send(new NovaTarefaMail($tarefa));
 
-        return redirect()->route('tarefa.show', ['tarefa' =>$tarefa->id]);
-      
+        return redirect()->route('tarefa.show', ['tarefa' => $tarefa->id]);
     }
 
     /**
@@ -79,7 +79,7 @@ class TarefaController extends Controller
      */
     public function show(Tarefa $tarefa)
     {
-        return view('tarefa.show',['tarefa' => $tarefa] );
+        return view('tarefa.show', ['tarefa' => $tarefa]);
     }
 
     /**
@@ -90,7 +90,13 @@ class TarefaController extends Controller
      */
     public function edit(Tarefa $tarefa)
     {
-        return view('tarefa.edit', ['tarefa' => $tarefa]);
+        $user_id = auth()->user()->id;
+
+        if ($tarefa->user_id == $user_id) {
+            return view('tarefa.edit', ['tarefa' => $tarefa]);
+        }
+
+        return view('acesso-negado');
     }
 
     /**
@@ -102,10 +108,19 @@ class TarefaController extends Controller
      */
     public function update(Request $request, Tarefa $tarefa)
     {
-       $tarefa->update($request->all());
-       return redirect()->route('tarefa.show', ['tarefa' => $tarefa->id]);
+    
 
-    }
+        if ($tarefa->user_id == auth()->user()->id) {
+            return view('acesso-negado');
+        }
+
+
+            $tarefa->update($request->all());
+            return redirect()->route('tarefa.show', ['tarefa' => $tarefa->id]);
+        }
+
+       
+  
 
     /**
      * Remove the specified resource from storage.
