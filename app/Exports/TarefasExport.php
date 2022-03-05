@@ -1,8 +1,7 @@
 <?php
 
 namespace App\Exports;
-
-use App\Models\Tarefa;
+use App\Models\tarefa;
 use Maatwebsite\Excel\Concerns\FromCollection;
 
 class TarefasExport implements FromCollection
