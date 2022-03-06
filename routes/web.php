@@ -1,10 +1,10 @@
 <?php
 
 use App\Mail\MensagemTesteMail;
-
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
+
 
 /*
 |--------------------------------------------------------------------------

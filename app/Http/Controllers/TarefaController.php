@@ -9,11 +9,12 @@ use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\TarefasExport;
 
+
 class TarefaController extends Controller
 {
 
     public function _construct()
-    {
+    {   
         // $this->middleware('auth');
     }
 
