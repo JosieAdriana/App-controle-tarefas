@@ -44,15 +44,17 @@ class User extends Authenticatable implements MustVerifyEmail
     ];
 
     public function sendPasswordResetNotification($token)
-    {       $this->notify(new RedefirSenhaNotification($token, $this->email, $this->name));
+    {
+        $this->notify(new RedefirSenhaNotification($token, $this->email, $this->name));
     }
     public function sendEmailVerificationNotification()
-    {      $this->notify(new VerificarEmailNotification($this->name));
-           
-        }
+    {
+        $this->notify(new VerificarEmailNotification($this->name));
+    }
 
-        public function tarefas() {
-            //hasMany (tem muitos)
-            return $this->hasMany('App\Models\Tarefa');
-        }
+    public function tarefas()
+    {
+        //hasMany (tem muitos)
+        return $this->hasMany('App\Models\Tarefa');
+    }
 }
