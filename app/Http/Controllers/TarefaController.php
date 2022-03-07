@@ -6,16 +6,16 @@ use Illuminate\Support\Facades\Mail;
 use App\Mail\NovaTarefaMail;
 use App\Models\Tarefa;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\TarefasExport;
 use PDF;
-
 
 class TarefaController extends Controller
 {
 
     public function _construct()
-    {   
+    {
         // $this->middleware('auth');
     }
 
@@ -136,21 +136,24 @@ class TarefaController extends Controller
         return redirect()->route('tarefa.index');
     }
 
-    public function exportacao($extensao)
+    public function exportacao(string $extensao)
     {
-
-
         if (in_array($extensao, ['xlsx', 'csv', 'pdf'])) {
             return Excel::download(new TarefasExport, 'lista_de_tarefas.' . $extensao);
         }
+
         return redirect()->route('tarefa.index');
     }
 
-    public function exportar() {
+    public function exportar(): Response
+    {
         $tarefas = auth()->user()->tarefas()->get();
-        $pdf = PDF::loadView('tarefa.pdf', ['tarefas' => $tarefas]);
+        $pdf = Pdf::loadView('tarefa.pdf', ['tarefas' => $tarefas]);
+
+        $pdf->setPaper('a4', 'lendscape');
+        //tipo de papel: a4, letter ...
+        //orientação da impressão: lendiscape (paisagem), ou portrait (retrato)
         //return $pdf->download('Lista_de_tarefas.pdf');
         return $pdf->stream('Lista_de_tarefas.pdf');
-
     }
 }
